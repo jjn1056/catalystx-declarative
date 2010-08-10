@@ -34,5 +34,14 @@ controller ::Controller::ActionParams {
         $ctx->response->body("action_args_second: $p1,$p2");
     }
 
+    action third under base
+    with hasActionParams(
+        p1=>300,
+        p2=>301,
+    ) is final {
+        my $p1 = $ctx->controller->action_for('third')->p1;
+        my $p2 = $ctx->controller->action_for('third')->p2;
+        $ctx->response->body("action_args_third: $p1,$p2");
+    }
 }
 

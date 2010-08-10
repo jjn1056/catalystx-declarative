@@ -70,5 +70,6 @@ is get('/foo/lower/down/the/param/3/road/5'), 8, 'capture args and block under w
 # Make sure action roles with parameters pass params to attributes
 is get('/actionparams/first'), 'action_args_first: 100,101', 'actionrole with params';
 is get('/actionparams/second'), 'action_args_second: 200,201', 'actionrole with params (part two)';
+is get('/actionparams/third'), 'action_args_third: 300,301', 'actionrole with params (part three)';
 
 done_testing;
