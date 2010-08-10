@@ -5,17 +5,6 @@ role CatalystX::Declare::Controller::ActionPreparation {
     use aliased 'CatalystX::Declare::Action::CatchValidationError';
     use aliased 'CatalystX::Declare::Dispatching::ChainTypeSensitivity';
 
-
-    method _apply_action_roles (Object $action, @roles) {
-
-        for my $role (CatchValidationError, @roles) {
-            my $fq_role = $self->_qualify_class_name(ActionRole => $role);
-
-            Class::MOP::load_class($fq_role);
-            $fq_role->meta->apply($action);
-        }
-    }
-
     method _find_method_type_constraint (Str $name) {
 
         $self->meta->find_method_type_constraint($name)
@@ -63,16 +52,18 @@ role CatalystX::Declare::Controller::ActionPreparation {
         $self->_ensure_applied_dispatchtype_roles;
     }
 
+    around gather_action_roles(%args) {
+        return (
+            $self->$orig(%args),
+            @{ delete($args{attributes}{CatalystX_Declarative_ActionRoles}) || [] },
+        );
+    }
+
     around create_action (%args) {
-
-        my @action_roles = @{ delete($args{attributes}{CatalystX_Declarative_ActionRoles}) || [] };
-
         my $action = $self->$orig(%args);
 
         return $action
             if $args{attributes}{Private};
-
-        $self->_apply_action_roles($action, @action_roles);
 
         return $action 
             unless $action->DOES(CatchValidationError);

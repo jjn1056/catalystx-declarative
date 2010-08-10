@@ -35,7 +35,7 @@ class CatalystX::Declare::Keyword::Controller
         );
     }
 
-    method default_superclasses { 'Catalyst::Controller' }
+    method default_superclasses { 'Catalyst::Controller::ActionRole' }
 
     method auto_make_immutable { 0 }
 
