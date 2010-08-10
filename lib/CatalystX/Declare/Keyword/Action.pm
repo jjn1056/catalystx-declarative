@@ -231,7 +231,15 @@ class CatalystX::Declare::Keyword::Action {
         # we need to fish for aliases here since we are still unclean
         my @roles = ();
         for my $role_with_arg(@roles_with_args) {
-            my $role = $role_with_arg->[0];
+            my ($role, $params) = @{$role_with_arg};
+            if($params) {
+                my ($first, @rest) = eval $params;
+                my %params = ref $first eq 'HASH' ? %$first : ($first, @rest);
+                for my $key (keys %params) {
+                    $attrs->{$key} = [$params{$key}];
+                }
+            }          
+
             if (defined(my $alias = $self->_check_for_available_import($ctx, $role))) {
                 $role = $alias;
             }

@@ -67,5 +67,8 @@ is get('/foo/wants_integer/butdoesntgetone'), 'no integer', 'validation error ca
 # fix bug with capture args below under { }
 is get('/foo/lower/down/the/param/3/road/5'), 8, 'capture args and block under work together';
 
+# Make sure action roles with parameters pass params to attributes
+is get('/actionparams/first'), 'action_args_first: 100,101', 'actionrole with params';
+is get('/actionparams/second'), 'action_args_second: 200,201', 'actionrole with params (part two)';
 
 done_testing;
