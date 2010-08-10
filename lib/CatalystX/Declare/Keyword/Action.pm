@@ -225,15 +225,20 @@ class CatalystX::Declare::Keyword::Action {
 
     method _handle_with_option (Object $ctx, HashRef $attrs) {
 
-        my $role = $ctx->strip_name
-            or croak "Expected bareword role specification for action after with";
+        my @roles_with_args = ();
+        push @roles_with_args, @{ $ctx->strip_names_and_args };
 
         # we need to fish for aliases here since we are still unclean
-        if (defined(my $alias = $self->_check_for_available_import($ctx, $role))) {
-            $role = $alias;
+        my @roles = ();
+        for my $role_with_arg(@roles_with_args) {
+            my $role = $role_with_arg->[0];
+            if (defined(my $alias = $self->_check_for_available_import($ctx, $role))) {
+                $role = $alias;
+            }
+            push @roles, $role;
         }
 
-        push @{ $attrs->{CatalystX_Declarative_ActionRoles} ||= [] }, $role;
+        push @{ $attrs->{CatalystX_Declarative_ActionRoles} ||= [] }, @roles;
 
         return;
     }
