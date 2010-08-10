@@ -1,4 +1,5 @@
 use MooseX::Declare;
+use 5.008008;
 
 class CatalystX::Declare extends MooseX::Declare is dirty {
 
