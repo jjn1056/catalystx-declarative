@@ -52,6 +52,9 @@ controller ::Controller::ActionParams {
         my $p1 = $ctx->controller->action_for('forth')->p1;
         my $p2 = $ctx->controller->action_for('forth')->p2;
         $ctx->response->body("action_args_forth: $p1,$p2");
+
+
+        $ctx->_dump($ctx->controller->action_for('forth'));
     }
 }
 

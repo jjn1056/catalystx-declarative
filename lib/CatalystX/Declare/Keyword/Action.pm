@@ -236,8 +236,10 @@ class CatalystX::Declare::Keyword::Action {
                 my ($first, @rest) = eval $params;
                 my %params = ref $first eq 'HASH' ? %$first : ($first, @rest); # both (%opts) and {%opts}
                 for my $key (keys %params) {
-                    push @{$attrs->{$key}}, $params{$key};
+                    my $parameters = ref $params{$key} eq 'ARRAY' ? @{$params{$key}} : $params{$key};
+                    push @{$attrs->{$key}}, $parameters;
                 }
+                $attrs->{_role_attributes}->{$role} = \%params;
             }          
 
             if (defined(my $alias = $self->_check_for_available_import($ctx, $role))) {
@@ -740,6 +742,87 @@ consume the C<RichBase> role declared above:
             );
         }
     }
+
+You can consume multiple action roles similarly to the way you do with the
+class or role keyword:
+
+    action user
+    with LoggedIn
+    with isSuperUser {}
+
+Or
+
+    action User
+    with (LoggedIn, isSuperUser) {}
+
+Lastly, you can pass parameters to the underlying L<Catalyst::Action> using
+a syntax that is similar to method traits:
+
+    action myaction with hasRole(opt1=>'val1', opt2=>'val2')
+
+Where C<%opts> is a hash that is used to populate $action->attributes in the
+same way you might have done the following in classic L<Catalyst>
+
+    sub myaction :Action :Does(hasRole) :opt1(val1) :opt2(val2)
+
+Here's a more detailed example:
+
+    action User
+    with hasLogger(log_engine=>'STDOUT')
+    with hasPermissions(
+        role=>['Administrator', 'Member'],
+    ) {}
+
+Think of these are classic catalyst subroutine attributes on steriods.  Unlike
+subroutine attributes, you can split and format your code across multiple lines
+and you can use deep and complex data structures such as HashRefs or ArrayRefs.
+Also, since the parameters are grouped syntactically within the C<with> keyword
+this should improve readability of your code, since it will be more clear which
+parameters belong to with roles.  This should give L<CatalystX::Declare> greater
+compatibility with legacy L<Catalyst> code but offer us a way forward from 
+needing subroutine attributes, which suffer from significant drawbacks.
+
+A few caveats and differences from method traits.  First of all, unlike method
+traits, parameters are not passed to the L<Catalyst::Action> constructor, but 
+instead used to populate the C<attributes> attribute, which is to preserve
+compatibility with how subroutine attributes work in classic L<Catalyst>.
+
+Additionally, since subroutines attributes supported a very limited syntax for
+supplying values, we follow the convention where parameter values are pushed 
+onto an arrayref.  In other words the following:
+
+    action User with hasLogger(engine=>'STDOUT')
+
+would create the following data structure:
+
+    $action->attributes->{engine} = ['STDOUT']
+
+The one exception is that if the value is an arrayref, those will be merged:
+
+    action User with Permissions(roles=>[qw/admin member/]) {}
+    ## Creates: $action->attributes->{roles} = ['admin','member']
+
+My feeling is that this gives better backward compatibility with classic sub
+attributes:
+
+    sub User :Action :Does(Permissions) :roles(admin) :roles(member)
+
+However, I realize this method could lead to namespace collisions.  So in
+addition to putting paramters into $action->attributes, we also populate a
+special key "_role_attributes", which will preserve parameters by role:
+
+    $action->attributes->{_role_attributes}->{$role} = \%params;
+
+So the following:
+
+    action User with Permissions(roles=>[qw/admin member/]) {}
+
+Creates:
+
+    $action->attributes->{_role_attributes}->{Permissions}
+      = {roles=>[qw/admin member/]};
+
+For now you should only use this for your private code.  
 
 =head2 Action Classes
 
