@@ -5,10 +5,10 @@ role hasActionParams {
     has [qw/p1 p2/] => (is=>'ro', lazy_build=>1);
 
     method _build_p1 {
-        $self->attributes->{p1}->[0];
+        join ',', @{$self->attributes->{p1}};
     }
     method _build_p2 {
-        $self->attributes->{p2}->[0];
+        join ',', @{$self->attributes->{p2}};
     }
 }
 
@@ -42,6 +42,16 @@ controller ::Controller::ActionParams {
         my $p1 = $ctx->controller->action_for('third')->p1;
         my $p2 = $ctx->controller->action_for('third')->p2;
         $ctx->response->body("action_args_third: $p1,$p2");
+    }
+
+    action forth under base
+    with (hasActionParams(
+        p1=>400,
+        p2=>401,
+    ), hasActionParams(p1=>1,p2=>2)) is final {
+        my $p1 = $ctx->controller->action_for('forth')->p1;
+        my $p2 = $ctx->controller->action_for('forth')->p2;
+        $ctx->response->body("action_args_forth: $p1,$p2");
     }
 }
 

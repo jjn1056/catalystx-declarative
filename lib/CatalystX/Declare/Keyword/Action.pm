@@ -234,9 +234,9 @@ class CatalystX::Declare::Keyword::Action {
             my ($role, $params) = @{$role_with_arg};
             if($params) {
                 my ($first, @rest) = eval $params;
-                my %params = ref $first eq 'HASH' ? %$first : ($first, @rest);
+                my %params = ref $first eq 'HASH' ? %$first : ($first, @rest); # both (%opts) and {%opts}
                 for my $key (keys %params) {
-                    $attrs->{$key} = [$params{$key}];
+                    push @{$attrs->{$key}}, $params{$key};
                 }
             }          
 

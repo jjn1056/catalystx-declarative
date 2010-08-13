@@ -71,5 +71,6 @@ is get('/foo/lower/down/the/param/3/road/5'), 8, 'capture args and block under w
 is get('/actionparams/first'), 'action_args_first: 100,101', 'actionrole with params';
 is get('/actionparams/second'), 'action_args_second: 200,201', 'actionrole with params (part two)';
 is get('/actionparams/third'), 'action_args_third: 300,301', 'actionrole with params (part three)';
+is get('/actionparams/forth'), 'action_args_forth: 400,1,401,2', 'actionrole with params (part four)';
 
 done_testing;
