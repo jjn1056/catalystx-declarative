@@ -239,7 +239,6 @@ class CatalystX::Declare::Keyword::Action {
                     my $parameters = ref $params{$key} eq 'ARRAY' ? @{$params{$key}} : $params{$key};
                     push @{$attrs->{$key}}, $parameters;
                 }
-                $attrs->{_role_attributes}->{$role} = \%params;
             }          
 
             if (defined(my $alias = $self->_check_for_available_import($ctx, $role))) {
@@ -807,22 +806,10 @@ attributes:
 
     sub User :Action :Does(Permissions) :roles(admin) :roles(member)
 
-However, I realize this method could lead to namespace collisions.  So in
-addition to putting paramters into $action->attributes, we also populate a
-special key "_role_attributes", which will preserve parameters by role:
-
-    $action->attributes->{_role_attributes}->{$role} = \%params;
-
-So the following:
-
-    action User with Permissions(roles=>[qw/admin member/]) {}
-
-Creates:
-
-    $action->attributes->{_role_attributes}->{Permissions}
-      = {roles=>[qw/admin member/]};
-
-For now you should only use this for your private code.  
+However, I realize this method could lead to namespace collisions within the
+C<$action->attributes> attribute.  For now this is an avoidable issue.  In the
+future we may add a C<$action->trait_attributes> or similar attribute to the
+L<Catalyst::Action> class in order to resolve this issue.
 
 =head2 Action Classes
 
