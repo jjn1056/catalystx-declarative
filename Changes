@@ -1,3 +1,9 @@
+[0.013] Wed Aug 25 19:29:01 EST 2010
+    - Controller now inherits from Catalyst::Controller::ActionRole
+    - ActionRoles can now be parameterized
+    - update dependencies
+    - docs and test for above
+
 [0.012] Thu Apr  1 21:03:30 CEST 2010
     - fixed query parameter handling
 
