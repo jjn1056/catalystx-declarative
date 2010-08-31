@@ -73,4 +73,7 @@ is get('/actionparams/second'), 'action_args_second: 200,201', 'actionrole with 
 is get('/actionparams/third'), 'action_args_third: 300,301', 'actionrole with params (part three)';
 is get('/actionparams/forth'), 'action_args_forth: 400,1,401,2', 'actionrole with params (part four)';
 
+is get('/actionparams/first_app_ns'), 'action_args_first: 100,101', 'actionrole with params (from App NS)';
+is get('/actionparams/first_cat_ns'), 'action_args_first: 100,101', 'actionrole with params (from Cat NS)';
+
 done_testing;

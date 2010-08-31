@@ -300,7 +300,7 @@ class CatalystX::Declare::Keyword::Action {
         $attrs->{Signature} = $proto;
         $attrs->{Action}    = [];
 
-        push @{ $attrs->{CatalystX_Declarative_ActionRoles} ||= [] }, CatchValidationError;
+        push @{ $attrs->{CatalystX_Declarative_DefaultActionRoles} ||= [] }, CatchValidationError;
 
         # default chained base to the global under var, to be resolved at runtime
         $attrs->{Chained} ||= UNDER_VAR;

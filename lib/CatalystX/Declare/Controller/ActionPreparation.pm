@@ -52,16 +52,22 @@ role CatalystX::Declare::Controller::ActionPreparation {
         $self->_ensure_applied_dispatchtype_roles;
     }
 
+
     around gather_action_roles(%args) {
         return (
             $self->$orig(%args),
-            @{ delete($args{attributes}{CatalystX_Declarative_ActionRoles}) || [] },
+            (map {
+                $self->_qualify_class_name(ActionRole => $_);
+                #$self->_expand_role_shortname($_);
+            } @{ delete($args{attributes}{CatalystX_Declarative_ActionRoles}) || [] }),
+            @{ delete($args{attributes}{CatalystX_Declarative_DefaultActionRoles}) || [] },
         );
     }
 
     around create_action (%args) {
         my $action = $self->$orig(%args);
 
+        ## TODO Do we really need this anymore?
         return $action
             if $args{attributes}{Private};
 
