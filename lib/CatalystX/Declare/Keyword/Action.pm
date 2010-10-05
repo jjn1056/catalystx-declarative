@@ -9,6 +9,7 @@ class CatalystX::Declare::Keyword::Action {
     use Data::Dump          qw( pp );
     use MooseX::Types::Util qw( has_available_type_export );
     use Moose::Util         qw( add_method_modifier ensure_all_roles );
+    use Data::Pond qw(pond_write_datum);
     use Class::Inspector;
     use Class::MOP;
 
@@ -143,10 +144,12 @@ class CatalystX::Declare::Keyword::Action {
                 next if $attr eq 'Chained' and $value eq UNDER_VAR;
 
                 push @attributes, 
-                    map { sprintf '%s%s', $attr, defined($_) ? sprintf('(%s)', $_) : '' }
-                        (ref($value) eq 'ARRAY') 
-                        ? @$value
-                        : $value;
+                    map {
+                        my $value = ref $_ ? pond_write_datum($_) : $_;
+                        sprintf '%s%s', $attr, defined($value) ? sprintf('(%s)', $value) : ''
+                    } (
+                        ref($value) eq 'ARRAY'
+                    ) ? @$value : $value;
             }
 
             return \@attributes;
@@ -184,7 +187,6 @@ class CatalystX::Declare::Keyword::Action {
             # merge runtime and compiletime attrs
             my %full_attrs = (%attributes, %$attrs);
             my $compiled_attrs = $compile_attrs->(\%full_attrs);
-
             my $real_method = $method->reify(
                 actual_body => $body,
                 attributes  => $compiled_attrs,
@@ -193,10 +195,8 @@ class CatalystX::Declare::Keyword::Action {
 
             # NYI
             if ($modifier) {
-
                 add_method_modifier $class, $modifier, [$name, $real_method];
-            }
-            else {
+            } else {
 
                 my $prepare_meta = sub {
                     my ($meta) = @_;
@@ -236,8 +236,10 @@ class CatalystX::Declare::Keyword::Action {
                 my ($first, @rest) = eval $params;
                 my %params = ref $first eq 'HASH' ? %$first : ($first, @rest); # both (%opts) and {%opts}
                 for my $key (keys %params) {
-                    my $parameters = ref $params{$key} eq 'ARRAY' ? @{$params{$key}} : $params{$key};
-                    push @{$attrs->{$key}}, $parameters;
+                    my $value = ref $params{$key} eq 'ARRAY' ? $params{$key} : [$params{$key}];
+                    push @{ $attrs->{$key} ||=[] }, @$value;
+                    ##push @{ $attrs->{$key} ||=[] }, $params;
+
                 }
             }          
 
@@ -248,7 +250,6 @@ class CatalystX::Declare::Keyword::Action {
         }
 
         push @{ $attrs->{CatalystX_Declarative_ActionRoles} ||= [] }, @roles;
-
         return;
     }
 

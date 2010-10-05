@@ -12,6 +12,13 @@ role hasActionParams {
     }
 }
 
+role hasActionParamsDeep {
+    has 'p_deep' => (is=>'ro', lazy_build=>1);
+    method _build_p_deep {
+        join ',', @{$self->attributes->{p_deep}};
+    }
+}
+
 controller ::Controller::ActionParams {
 
     action base
@@ -45,12 +52,13 @@ controller ::Controller::ActionParams {
     }
 
     action forth under base
-    with (hasActionParams(
-        p1=>400,
-        p2=>401,
-    ), hasActionParams(p1=>1,p2=>2)) is final {
-        my $p1 = $ctx->controller->action_for('forth')->p1;
-        my $p2 = $ctx->controller->action_for('forth')->p2;
+    with (
+        hasActionParams(p1=>400,p2=>401), 
+        hasActionParams(p1=>1,p2=>2, p0=>3)
+    ) is final {
+        my $action = $ctx->controller->action_for('forth');
+        my $p1 = $action->p1;
+        my $p2 = $action->p2;
         $ctx->response->body("action_args_forth: $p1,$p2");
     }
 
@@ -69,6 +77,15 @@ controller ::Controller::ActionParams {
         my $p2 = $ctx->controller->action_for('first')->p2;
         $ctx->response->body("action_args_first: $p1,$p2");
     }
+
+    action check_deep under base
+    with hasActionParamsDeep(p_deep=>{a=>1,b=>2}) is final {
+        my $action = $ctx->controller->action_for('check_deep');
+        my $p_deep = $action->p_deep;
+        ## $ctx->log->_dump($action->attributes);
+        $ctx->response->body("action_args_deep: $p_deep");
+    }
+
 
 }
 

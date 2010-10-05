@@ -19,6 +19,7 @@ BEGIN {
 name            'CatalystX-Declare';
 author          'Robert Sedlacek <rs@474.at>';
 license         'perl';
+version         '0.015';
 
 all_from        'lib/CatalystX/Declare.pm';
 readme_from     'lib/CatalystX/Declare.pm';
@@ -43,6 +44,7 @@ requires        'MooseX::Role::Parameterized',      '0.13';
 requires        'MooseX::Types',                    '0.20';
 requires        'MooseX::Method::Signatures',       '0.26';
 requires        'Catalyst::Controller::ActionRole', '0.15';
+requires        'Data::Pond',                       '0.002';
 requires        'FindBin';
 
 test_requires   'Test::More',                       '0.92';
