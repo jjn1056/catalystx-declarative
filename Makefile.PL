@@ -27,12 +27,12 @@ requires        'Data::Dump',                       '1.14';
 requires        'Catalyst',                         '5.80025';
 requires        'CLASS',                            '1.00';
 requires        'Devel::Declare',                   '0.006000';
-requires        'Moose',                            '1.12';
-requires        'MooseX::Declare',                  '0.33';
-requires        'MooseX::MethodAttributes',         '0.16';
-requires        'MooseX::Role::Parameterized',      '0.13';
-requires        'MooseX::Types',                    '0.20';
-requires        'MooseX::Method::Signatures',       '0.26';
+requires        'Moose',                            '1.14';
+requires        'MooseX::Declare',                  '0.34';
+requires        'MooseX::MethodAttributes',         '0.24';
+requires        'MooseX::Role::Parameterized',      '0.19';
+requires        'MooseX::Types',                    '0.24';
+requires        'MooseX::Method::Signatures',       '0.36';
 requires        'Catalyst::Controller::ActionRole', '0.15';
 requires        'Data::Pond',                       '0.002';
 
