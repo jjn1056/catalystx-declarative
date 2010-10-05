@@ -1,5 +1,4 @@
 use MooseX::Declare;
-use MooseX::AttributeHelpers;
 
 role CatalystX::Declare::Controller::Meta::TypeConstraintMapping {
 
@@ -14,9 +13,9 @@ role CatalystX::Declare::Controller::Meta::TypeConstraintMapping {
         isa         => HashRef[Object],
         required    => 1,
         lazy_build  => 1,
-        provides    => {
-            get         => 'get_method_type_constraint',
-            set         => 'set_method_type_constraint',
+        handles    => {
+            'get_method_type_constraint' => 'get',
+            'set_method_type_constraint' => 'set,
         },
     );
 
@@ -26,9 +25,9 @@ role CatalystX::Declare::Controller::Meta::TypeConstraintMapping {
         isa         => HashRef[ArrayRef[Str]],
         required    => 1,
         lazy_build  => 1,
-        provides    => {
-            get         => 'get_method_named_params',
-            set         => 'set_method_named_params',
+        handles    => {
+            'get_method_named_params' => 'get',
+            'set_method_named_params' => 'set',
         },
     );
 
@@ -38,9 +37,9 @@ role CatalystX::Declare::Controller::Meta::TypeConstraintMapping {
         isa         => HashRef[HashRef[Object]],
         required    => 1,
         lazy_build  => 1,
-        provides    => {
-            get         => 'get_method_named_type_constraint',
-            set         => 'set_method_named_type_constraint',
+        handles    => {
+            'get_method_named_type_constraint' => 'get',
+            'set_method_named_type_constraint' => 'set',
         },
     );
 
