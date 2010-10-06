@@ -1,3 +1,14 @@
+[0.015] Mon Oct 05 21:13:30 EST 2010
+    - Changed around the Makefile.PL to assist automation and hopefully
+      standardize it a bit for readability.
+    - Updated a bunch of dependencies to modern versions and remove those
+      which are no longer used.
+    - Switched usage of MX:AttributeHelpers to use Native functions that are
+      present in modern Mooses.
+    - Made it so that parameterized action traits using 'deep' parameters
+      (those which are references and not simple scalars) actual work.  Added
+      tests for this and a few more test cases for parameterized action traits.
+
 [0.014] Mon Aug 30 22:52:30 EST 2010
     - Fixed regression introduced in last version related to how
       we expand 'shortname' actionrole namespaces.  We now revert
