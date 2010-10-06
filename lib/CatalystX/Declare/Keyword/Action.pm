@@ -196,7 +196,8 @@ class CatalystX::Declare::Keyword::Action {
             # NYI
             if ($modifier) {
                 add_method_modifier $class, $modifier, [$name, $real_method];
-            } else {
+            }
+            else {
 
                 my $prepare_meta = sub {
                     my ($meta) = @_;
@@ -216,7 +217,6 @@ class CatalystX::Declare::Keyword::Action {
                     $real_meta->$prepare_meta;
                 }
                 else {
-
                     $class->meta->$prepare_meta;
                 }
             }
