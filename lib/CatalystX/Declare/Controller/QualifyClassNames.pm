@@ -1,6 +1,6 @@
 use MooseX::Declare;
 
-use Class::MOP;
+use Class::Load;
 use Class::Inspector;
 
 role CatalystX::Declare::Controller::QualifyClassNames {
@@ -20,7 +20,7 @@ role CatalystX::Declare::Controller::QualifyClassNames {
         for my $class (@possibilities) {
 
             return $class 
-                if Class::MOP::is_class_loaded($class);
+                if Class::Load::is_class_loaded($class);
 
             return $class
                 if Class::Inspector->installed($class);

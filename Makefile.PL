@@ -35,6 +35,7 @@ requires        'MooseX::Types',                    '0.24';
 requires        'MooseX::Method::Signatures',       '0.36';
 requires        'Catalyst::Controller::ActionRole', '0.15';
 requires        'Data::Pond',                       '0.002';
+requires        'Load::Class',                      '0.20';
 
 test_requires   'Test::More',                       '0.96';
 test_requires   'Test::Output',                     '0.16';
