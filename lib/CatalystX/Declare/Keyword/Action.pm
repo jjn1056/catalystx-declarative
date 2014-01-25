@@ -11,7 +11,7 @@ class CatalystX::Declare::Keyword::Action {
     use Moose::Util         qw( add_method_modifier ensure_all_roles );
     use Data::Pond qw(pond_write_datum);
     use Class::Inspector;
-    use Class::MOP;
+    use Class::Load;
 
 
     use constant STOP_PARSING   => '__MXDECLARE_STOP_PARSING__';

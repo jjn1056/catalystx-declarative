@@ -19,7 +19,7 @@ class CatalystX::Declare::Keyword::Controller
 
         $ctx->add_preamble_code_parts(
             ['BEGIN',
-                sprintf('Class::MOP::load_class(q(%s))', TypeConstraintMapping),
+                sprintf('Class::Load::load_class(q(%s))', TypeConstraintMapping),
                 sprintf('%s->meta->apply(%s->meta->meta)', TypeConstraintMapping, $package),
             ],
         );
